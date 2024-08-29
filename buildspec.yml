@@ -2,15 +2,14 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      python: 3.8
     commands:
       - echo Installing AWS CLI
       - pip install awscli
   build:
     commands:
       - echo Deploying CloudFormation stack
-      - aws cloudformation deploy --template-file ec2-instance.yaml --stack-name my-ec2-stack
+      - aws cloudformation deploy --template-file ec2-instance.yaml --stack-name my-ec2-stack-1
+
 artifacts:
   files:
     - '**/*'
