@@ -1,14 +1,21 @@
 #!/bin/bash
 
-# Fetch repository name from CodeCommit
-repo_url=$(aws codebuild batch-get-projects --names $CODEBUILD_PROJECT_NAME --query 'projects[0].source.location' --output text)
-repo_name=$(basename $repo_url | sed 's/.git$//')
+# Ensure Git is available
+if ! command -v git &> /dev/null
+then
+    echo "Git could not be found"
+    exit 1
+fi
 
+# Fetch repository name using Git commands
+repo_url=$(git config --get remote.origin.url)
+repo_name=$(basename "$repo_url" .git)
 echo "Repository Name: $repo_name"
-echo "Branch Ref: $CODEBUILD_SOURCE_VERSION"
-echo "Build Number: $CODEBUILD_BUILD_NUMBER"
 
+# Fetch branch name
 branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')
+echo "Branch Ref: $branch_name"
+echo "Build Number: $CODEBUILD_BUILD_NUMBER"
 
 # Handle edge cases where variables might be empty
 if [ -z "$repo_name" ]; then
@@ -21,6 +28,7 @@ if [ -z "$branch_name" ]; then
   exit 1
 fi
 
+# Construct instance name
 instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
 echo "Instance Name: $instance_name"
 
