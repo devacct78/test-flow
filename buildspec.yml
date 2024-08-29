@@ -18,7 +18,8 @@ phases:
       - instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
       - echo "Instance Name: $instance_name"
       - echo "Deploying CloudFormation stack..."
-      - aws cloudformation deploy \
+      - |
+        aws cloudformation deploy \
           --template-file ec2-instance.yaml \
           --stack-name my-ec2-stack-${CODEBUILD_BUILD_NUMBER} \
           --parameter-overrides InstanceName=$instance_name
