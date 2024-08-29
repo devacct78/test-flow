@@ -7,7 +7,6 @@ phases:
     commands:
       - echo Installing AWS CLI
       - pip install awscli
-
   build:
     commands:
       - echo Deploying CloudFormation stack
