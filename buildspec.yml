@@ -10,7 +10,7 @@ phases:
   build:
     commands:
       - echo Deploying CloudFormation stack
-      - aws cloudformation deploy --template-file ec2-instance.yaml --stack-name my-ec2-stack \
+      - aws cloudformation deploy --template-file ec2-instance.yaml --stack-name my-ec2-stack
 artifacts:
   files:
     - '**/*'
