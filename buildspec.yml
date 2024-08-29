@@ -5,24 +5,12 @@ phases:
     commands:
       - echo "Installing AWS CLI"
       - pip install awscli
+
   build:
     commands:
-      - echo "Repository Name: $CODEBUILD_SOURCE_REPO_NAME"
-      - echo "Branch Ref: $CODEBUILD_SOURCE_VERSION"
-      - echo "Build Number: $CODEBUILD_BUILD_NUMBER"
-      - echo "Extracting repo name and branch name..."
-      - repo_name=$(echo $CODEBUILD_SOURCE_REPO_NAME | tr '[:upper:]' '[:lower:]')
-      - branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')
-      - echo "Repo Name: $repo_name"
-      - echo "Branch Name: $branch_name"
-      - instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
-      - echo "Instance Name: $instance_name"
-      - echo "Deploying CloudFormation stack..."
-      - |
-        aws cloudformation deploy \
-          --template-file ec2-instance.yaml \
-          --stack-name my-ec2-stack-${CODEBUILD_BUILD_NUMBER} \
-          --parameter-overrides InstanceName=$instance_name
+      - echo "Running deployment script"
+      - ./deploy.sh
+
 artifacts:
   files:
     - '**/*'
