@@ -1,19 +1,13 @@
 #!/bin/bash
 
-echo "Repository Name: $CODEBUILD_SOURCE_REPO_NAME"
 echo "Branch Ref: $CODEBUILD_SOURCE_VERSION"
 echo "Build Number: $CODEBUILD_BUILD_NUMBER"
 
-# Extract repo name and branch name
-repo_name=$(echo $CODEBUILD_SOURCE_REPO_NAME | tr '[:upper:]' '[:lower:]')
+# Use a static name for the repository
+repo_name="test-flow"
 branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')
 
 # Handle edge cases where variables might be empty
-if [ -z "$repo_name" ]; then
-  echo "Error: CODEBUILD_SOURCE_REPO_NAME is empty"
-  exit 1
-fi
-
 if [ -z "$branch_name" ]; then
   echo "Error: CODEBUILD_SOURCE_VERSION is empty or not in expected format"
   exit 1
