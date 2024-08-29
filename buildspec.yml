@@ -10,7 +10,7 @@ phases:
         # Extract repo name and branch name
         repo_name=$(echo $CODEBUILD_SOURCE_REPO_NAME | tr '[:upper:]' '[:lower:]')
         branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')
-        
+
         # Handle edge cases where variables might be empty
         if [ -z "$repo_name" ]; then
           echo "Error: CODEBUILD_SOURCE_REPO_NAME is empty"
@@ -25,7 +25,7 @@ phases:
         # Construct instance name
         instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
         echo "Instance Name: $instance_name"
-        
+
         # Deploy CloudFormation stack
         aws cloudformation deploy \
           --template-file ec2-instance.yaml \
