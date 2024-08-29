@@ -8,11 +8,16 @@ phases:
   build:
     commands:
       - echo Deploying CloudFormation stack
-      - repo_name=$(echo $CODEBUILD_SOURCE_REPO_NAME | tr '[:upper:]' '[:lower:]')  # Convert to lowercase for consistency
-      - branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')  # Get branch name and convert to lowercase
-      - instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
-      - echo "Instance Name: $instance_name"
-      - aws cloudformation deploy --template-file ec2-instance.yaml --stack-name my-ec2-stack-${CODEBUILD_BUILD_NUMBER} --parameter-overrides InstanceName=$instance_name
+      - |
+        repo_name=$(echo $CODEBUILD_SOURCE_REPO_NAME | tr '[:upper:]' '[:lower:]')  # Convert to lowercase for consistency
+        branch_name=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/refs\/heads\///' | tr '[:upper:]' '[:lower:]')  # Get branch name and convert to lowercase
+        instance_name="${repo_name}-${branch_name}-${CODEBUILD_BUILD_NUMBER}-ec2"
+        echo "Instance Name: $instance_name"
+        aws cloudformation deploy \
+          --template-file ec2-instance.yaml \
+          --stack-name my-ec2-stack-${CODEBUILD_BUILD_NUMBER} \
+          --parameter-overrides InstanceName=$instance_name
+
 artifacts:
   files:
     - '**/*'
